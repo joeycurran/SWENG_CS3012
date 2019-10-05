@@ -1,7 +1,5 @@
 
 
-	
-
 // Java Program for Lowest Common Ancestor in a Binary Tree 
 // A O(n) solution to find LCA of two given values n1 and n2 
 import java.util.ArrayList; 
@@ -14,96 +12,113 @@ import java.util.List;
 
 
 public class lowestCommonAncestor<Key extends Comparable<Key>, Value> {
+	
+	private TreeNode root;
+	
+	
+	lowestCommonAncestor(){
+		root = null;
+	}
 
 	class TreeNode {
-		private int val;
+		private Key key;
+		private Value val;
 		private TreeNode left;
 		private TreeNode right;
-		private int N;
+		private int nodesBelow;
+
+
+
+		public TreeNode(Key key, Value val, int nodesBelow ) {
+			this.key = key;
+			this.val = val;
+			this.nodesBelow= nodesBelow;
+		}
 	}
 	
-
-	public TreeNode LCA(TreeNode root, TreeNode p, TreeNode q) {
-		if(root == null){
-			return null;
-		}if((p == root) || (q == root)){
-			return root;
-		} 
-		if(root.left == null && root.right == null){
-			return null;
+	public TreeNode createNode(Key key, Value val, int nodesBelow) {
+		
+		TreeNode node = new TreeNode (key, val, nodesBelow);
+		return node;
+	}
+	
+	public boolean isEmpty(TreeNode root) {
+		if(root == null) return true;
+		return false;
+	}
+	
+	//check if key exists
+	public boolean existsCheck(Key key) {
+		if(getNode(key) != null) {
+			return true;
 		}
-		List<TreeNode> path1 = new ArrayList<>();
-		List<TreeNode> path2 = new ArrayList<>();
+		else {
+			return false;
+		}
+	}
 
-		path1 = getPath(root,p,path1);
-		path2 = getPath(root,q,path2);
-		if(path1.size() > 1 &&  path2.size() > 1){
-			for(int i = 0; i < path1.size(); i++){
-				if((i == path1.size()-1 || i == path2.size()-1) && path1.get(i) == path2.get(i)){
-					return path1.get(i);
-				}
-				if(path1.get(i) != path2.get(i)){
-					return path1.get(i-1);
-				}
+	public Value getNode(Key key) {
+		Value x = null;
+		if( key != null) x = getNode(root, key);
+		return x;
+
+	}
+
+
+	private Value getNode(TreeNode x, Key key) {
+		if( x==null) return null;
+		int compare = key.compareTo(x.key);
+		if (compare < 0) return getNode(x.left, key);
+		else if (compare > 0) return getNode(x.right, key);
+		else return x.val;
+	}
+	
+	public void putNode(Key key, Value val) {
+    	if (val!= null && !existsCheck(key) ){
+				root = putNode(root, key, val);
 			}
 		}
-		return null;
-	}
-	/**
-	 * Return the path from root to node
-	 */
-	private  List<TreeNode> getPath(TreeNode root, TreeNode node, List<TreeNode> path){
-		if(root == null){
-			return path;
+	
+	private TreeNode putNode(TreeNode x, Key key, Value val) {
+		if(x == null) return new TreeNode(key, val, 1);
+		int compare = key.compareTo(x.key);
+		if (compare < 0) x.left  = putNode(x.left,  key, val);
+        else if (compare > 0) x.right = putNode(x.right, key, val);
+        else x.val   = val;
+        x.nodesBelow = 1 + size(x.left) + size(x.right); //increment the number of nodes under this node
+        return x;
+    }
+	
+	private int size(TreeNode x) {
+        if (x == null) return 0;
+        else return x.nodesBelow;
+    }
+	
+	 //returns the lowest common ancestor of two keys if both exist in the tree.
+		public Key getLowestCommonAncestor(Key keyA, Key keyB){
+			Key answer = null;
+			//there exists a LCA if both the keys are in the binary tree
+			if (existsCheck(keyA) && existsCheck(keyB)){
+				answer = getLowestCommonAncestor(root, keyA, keyB);
+			}
+			return answer;
 		}
-		if(root == node){
-			path.add(root);
-			return path;
-		}
-		if(root.left == node){
-			path.add(root);
-			path.add(root.left);
-			return path;
-		}
-		if(root.right == node){
-			path.add(root);
-			path.add(root.right);
-			return path;
-		}
-		if(isLeftChild(root,node)){
-			path.add(root);
-			return getPath(root.left,node,path);
-		}else{
-			path.add(root);
-			return getPath(root.right,node,path);
-		}
-	}
-	/**
-	 * Return true if the a given node is in the left subtree
-	 */
-	private boolean isLeftChild(TreeNode root, TreeNode node){
-		return isChild(root.left,node);
-	}
 
-	/**
-	 * Return true if the a given node is in the right subtree
-	 */
-	private boolean isRightChild(TreeNode root, TreeNode node){
-		return isChild(root.right,node);   
-	}
-
-	/**
-	 * Return true if the a given node is a child of the tree rooted at parent.
-	 */
-	private boolean isChild(TreeNode parent, TreeNode child){
-		if(parent == null){
-			return false;}
-		if(parent == child){
-			return true;
-		}return (isChild(parent.left,child) || isChild(parent.right,child));
-	}
+		private Key getLowestCommonAncestor(TreeNode node, Key keyA, Key keyB){
+			//if both inputs are greater than the current node, LCA is in right subtree
+			if ((node.key.compareTo(keyA)<0 && node.key.compareTo(keyB)<0)){
+				return  getLowestCommonAncestor(node.right, keyA, keyB);
+			}
+			//else if both are less, then LCA is in the right subtree
+			else if((node.key.compareTo(keyA)>0 && node.key.compareTo(keyB)>0)){
+				return  getLowestCommonAncestor(node.left, keyA, keyB);
+			}
+			//otherwise the current node is the LCA
+			else{
+				return node.key;
+			}
+		}
 
 }
-
 
 
