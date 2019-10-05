@@ -1,85 +1,109 @@
 
 
-	// Java Program for Lowest Common Ancestor in a Binary Tree 
-	// A O(n) solution to find LCA of two given values n1 and n2 
-	import java.util.ArrayList; 
-	import java.util.List; 
-	  
-	// A Binary Tree node 
-	class Node { 
-	    int data; 
-	    Node left, right; 
-	  
-	    Node(int value) { 
-	        data = value; 
-	        left = right = null; 
-	    } 
-	} 
-	  
-	public class lowestCommonAncestor 
-	{ 
-	  
-	    Node root; 
-	    private List<Integer> path1 = new ArrayList<>(); 
-	    private List<Integer> path2 = new ArrayList<>(); 
-	  
-	    // Finds the path from root node to given root of the tree. 
-	    int findLCA(int n1, int n2) { 
-	        path1.clear(); 
-	        path2.clear(); 
-	        return findLCAInternal(root, n1, n2); 
-	    } 
-	  
-	    private int findLCAInternal(Node root, int n1, int n2) { 
-	  
-	        if (!findPath(root, n1, path1) || !findPath(root, n2, path2)) { 
-	            System.out.println((path1.size() > 0) ? "n1 is present" : "n1 is missing"); 
-	            System.out.println((path2.size() > 0) ? "n2 is present" : "n2 is missing"); 
-	            return -1; 
-	        } 
-	  
-	        int i; 
-	        for (i = 0; i < path1.size() && i < path2.size(); i++) { 
-	              
-	        // System.out.println(path1.get(i) + " " + path2.get(i)); 
-	            if (!path1.get(i).equals(path2.get(i))) 
-	                break; 
-	        } 
-	  
-	        return path1.get(i-1); 
-	    } 
-	      
-	    // Finds the path from root node to given root of the tree, Stores the 
-	    // path in a vector path[], returns true if path exists otherwise false 
-	    private boolean findPath(Node root, int n, List<Integer> path) 
-	    { 
-	        // base case 
-	        if (root == null) { 
-	            return false; 
-	        } 
-	          
-	        // Store this node . The node will be removed if 
-	        // not in path from root to n. 
-	        path.add(root.data); 
-	  
-	        if (root.data == n) { 
-	            return true; 
-	        } 
-	  
-	        if (root.left != null && findPath(root.left, n, path)) { 
-	            return true; 
-	        } 
-	  
-	        if (root.right != null && findPath(root.right, n, path)) { 
-	            return true; 
-	        } 
-	  
-	        // If not present in subtree rooted with root, remove root from 
-	        // path[] and return false 
-	        path.remove(path.size()-1); 
-	  
-	        return false; 
-	    } 
+	
+
+// Java Program for Lowest Common Ancestor in a Binary Tree 
+// A O(n) solution to find LCA of two given values n1 and n2 
+import java.util.ArrayList; 
+import java.util.List; 
+
+// A Binary Tree node 
+
+
+
+
+
+public class lowestCommonAncestor<Key extends Comparable<Key>, Value> {
+
+	class TreeNode {
+		private int val;
+		private TreeNode left;
+		private TreeNode right;
+		private int N;
 	}
-	   
+	
+
+	public TreeNode LCA(TreeNode root, TreeNode p, TreeNode q) {
+		if(root == null){
+			return null;
+		}if((p == root) || (q == root)){
+			return root;
+		} 
+		if(root.left == null && root.right == null){
+			return null;
+		}
+		List<TreeNode> path1 = new ArrayList<>();
+		List<TreeNode> path2 = new ArrayList<>();
+
+		path1 = getPath(root,p,path1);
+		path2 = getPath(root,q,path2);
+		if(path1.size() > 1 &&  path2.size() > 1){
+			for(int i = 0; i < path1.size(); i++){
+				if((i == path1.size()-1 || i == path2.size()-1) && path1.get(i) == path2.get(i)){
+					return path1.get(i);
+				}
+				if(path1.get(i) != path2.get(i)){
+					return path1.get(i-1);
+				}
+			}
+		}
+		return null;
+	}
+	/**
+	 * Return the path from root to node
+	 */
+	private  List<TreeNode> getPath(TreeNode root, TreeNode node, List<TreeNode> path){
+		if(root == null){
+			return path;
+		}
+		if(root == node){
+			path.add(root);
+			return path;
+		}
+		if(root.left == node){
+			path.add(root);
+			path.add(root.left);
+			return path;
+		}
+		if(root.right == node){
+			path.add(root);
+			path.add(root.right);
+			return path;
+		}
+		if(isLeftChild(root,node)){
+			path.add(root);
+			return getPath(root.left,node,path);
+		}else{
+			path.add(root);
+			return getPath(root.right,node,path);
+		}
+	}
+	/**
+	 * Return true if the a given node is in the left subtree
+	 */
+	private boolean isLeftChild(TreeNode root, TreeNode node){
+		return isChild(root.left,node);
+	}
+
+	/**
+	 * Return true if the a given node is in the right subtree
+	 */
+	private boolean isRightChild(TreeNode root, TreeNode node){
+		return isChild(root.right,node);   
+	}
+
+	/**
+	 * Return true if the a given node is a child of the tree rooted at parent.
+	 */
+	private boolean isChild(TreeNode parent, TreeNode child){
+		if(parent == null){
+			return false;}
+		if(parent == child){
+			return true;
+		}return (isChild(parent.left,child) || isChild(parent.right,child));
+	}
+
+}
+
+
 
