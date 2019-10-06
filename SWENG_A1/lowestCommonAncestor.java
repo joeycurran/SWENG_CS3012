@@ -36,16 +36,6 @@ public class lowestCommonAncestor<Key extends Comparable<Key>, Value> {
 		}
 	}
 	
-	public TreeNode createNode(Key key, Value val, int nodesBelow) {
-		
-		TreeNode node = new TreeNode (key, val, nodesBelow);
-		return node;
-	}
-	
-	public boolean isEmpty(TreeNode root) {
-		if(root == null) return true;
-		return false;
-	}
 	
 	//check if key exists
 	public boolean existsCheck(Key key) {
