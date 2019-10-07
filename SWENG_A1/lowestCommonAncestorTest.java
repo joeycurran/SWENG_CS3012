@@ -63,13 +63,22 @@ public class lowestCommonAncestorTest {
 		
 		assertEquals("Checking if we can find lca for this tree", (Integer)5, lca.getNode(3));
 		assertEquals("Checking if we can find lca for this tree", null, lca.getNode(8));
-
-		
+		assertEquals("Checking if we can find null node", null, lca.getNode(null));
 		
 		
 	}
-
-
 	
-
+	@ Test 
+	public void existsCheckTest() {
+		lowestCommonAncestor<Integer, Integer> lca = new lowestCommonAncestor<Integer, Integer>();
+		assertFalse("Checking if any node exists in empty tree", lca.existsCheck(3));
+		lca.putNode(1, 1);
+		lca.putNode(2, 2);
+		lca.putNode(3, 5);
+		lca.putNode(4, 4);
+		lca.putNode(5, 5);
+		assertTrue("Checking if node exists in  tree", lca.existsCheck(5));
+		assertTrue("Checking if node exists in  tree", lca.existsCheck(4));
+		assertFalse("Checking if node exists in tree", lca.existsCheck(9));
+	}
 }
