@@ -110,6 +110,19 @@ public class lowestCommonAncestor<Key extends Comparable<Key>, Value> {
 				return node.key;
 			}
 		}
+	public String treeToString(){
+		return nodeToString(root);
+	}
+	private String nodeToString(TreeNode node){
+		if(node == null){
+			return "()";
+		}
+		else{
+			return "(" + nodeToString(node.left) + node.key + nodeToString(node.right) + ")";
+			//get keys in order of left and right subtree with current node in centre
+		}
+	}
+
 
 }
 
