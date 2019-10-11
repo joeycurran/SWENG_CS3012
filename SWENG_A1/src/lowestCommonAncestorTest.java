@@ -84,6 +84,40 @@ public class lowestCommonAncestorTest {
 		assertFalse("Checking if node exists in tree", lca.existsCheck(9));
 	}
 
+		@ Test 
+	public void getLCATest() {
+		lowestCommonAncestor<Integer, Integer> lca = new lowestCommonAncestor<Integer, Integer>();
+		lca.putNode(4, 4);
+		lca.putNode(2, 2);
+		lca.putNode(3, 3);
+		lca.putNode(7, 7);
+		lca.putNode(6, 6);
+		lca.putNode(8, 8);
+		lca.putNode(9, 9);
+		lca.putNode(10, 10);
+		assertEquals("Checking two common ancestors, where LCA is the root", (Integer)4, lca.getLowestCommonAncestor(3, 9));
+		assertNull("Checking where one inputNode does not exist in the tree", lca.getLowestCommonAncestor(4, 5));
+		assertEquals("Checking two common ancestors, where LCA is not the root", (Integer)7, lca.getLowestCommonAncestor(6, 10));
+	}
+
+	@Test
+	public void testPrint(){
+		//checks to see if the putNode function operates as needed
+		lowestCommonAncestor<Integer, Integer> lca = new lowestCommonAncestor<Integer, Integer>();
+		lca.putNode(4, 4);
+		lca.putNode(3, 3);
+		lca.putNode(7, 7);
+		lca.putNode(6, 6);
+		lca.putNode(9, 9);
+		lca.putNode(10, 10);
+
+		assertEquals("Testing that the keys were correctly inserted into the tree", "((()3())4((()6())7(()9(()10()))))" , lca.treeToString());
+		lca.putNode(20, 20);
+		lca.putNode(null, null);
+		assertEquals("Testing that the keys were correctly inserted into the tree", "((()3())4((()6())7(()9(()10(()20())))))" , lca.treeToString());
+
+
+	}
 	
 	
 
