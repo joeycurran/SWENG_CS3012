@@ -138,6 +138,13 @@ public class LCADAGTest {
 		assertEquals(adj, graph.adj(4).toString());
 	}
 	
+	@Test(expected=Exception.class)
+	public void exceptionTest(){
+		
+		//Can't make a directed graph with less than 0 vertices
+		
+		DAG graph = new DAG(-5);
+	}
 	
 	@Test
 	public void addEdge()
@@ -229,7 +236,7 @@ public class LCADAGTest {
 		
 		graph.findCycle(0);
 		
-		assertTrue(graph.findCycle(0));
+		assertTrue(graph.hasCycle());
 	}
 	
 	@Test
@@ -242,7 +249,7 @@ public class LCADAGTest {
 		graph.addEdge(3, 3);
 		
 		graph.findCycle(1);
-		assertFalse(graph.findCycle(1));
+		assertFalse(graph.hasCycle());
 	}
 	
 	@Test
@@ -333,8 +340,6 @@ public class LCADAGTest {
 		assertEquals(-1, graph.findLCA(0, 4));
 		assertEquals(-1, graph.findLCA(0, 0));
 	}
-	
-}
 	
 	
 
