@@ -122,223 +122,213 @@ public class LCADAGTest {
 	@Test
 	public void testDAG()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(2, 5);
-		graph.addEdge(4, 6);
-		graph.addEdge(4, 7);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(2, 5);
+		dag.addEdge(4, 6);
+		dag.addEdge(4, 7);
 		
-		assertEquals(1, graph.indegree(4));
-		assertEquals(2, graph.outdegree(4));
-		assertEquals(5, graph.E());
-		assertEquals(10, graph.V());
+		assertEquals("checking for indegree",1, dag.indegree(4));
+		assertEquals("checking fo routdegree",2, dag.outdegree(4));
+		assertEquals("Checking edges", 5, dag.E());
+		assertEquals("checking vertices", 10, dag.V());
 		String adj = "[6, 7]";
-		assertEquals(adj, graph.adj(4).toString());
+		assertEquals(adj, dag.adj(4).toString());
 	}
 	
 	@Test(expected=Exception.class)
 	public void exceptionTest(){
 		
-		//Can't make a directed graph with less than 0 vertices
+		//Can't make a directed dag with less than 0 vertices
 		
-		DAG graph = new DAG(-5);
+		DAG dag = new DAG(-5);
 	}
 	
 	@Test
 	public void addEdge()
 	{
-		DAG graph = new DAG(5);
+		DAG dag = new DAG(5);
 		
-		graph.addEdge(1,2);
+		dag.addEdge(1,2);
 
 		//As negative, will print a system error and not addEdge
-		graph.addEdge(-1, -6);
+		dag.addEdge(-1, -6);
 		
 		//This will not addEdge as 12 > 5
-		graph.addEdge(3, 12);
+		dag.addEdge(3, 12);
 		
-		assertEquals(1, graph.E());
+		assertEquals(1, dag.E());
 	}
 	
 	@Test
 	public void testIndegree()
 	{
-		DAG graph = new DAG(5);
+		DAG dag = new DAG(5);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(3, 3);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(3, 3);
 		
-		assertEquals(1, graph.indegree(3));
-	
-		assertEquals(-1, graph.indegree(5));
+		assertEquals(1, dag.indegree(3));
+		assertEquals(-1, dag.indegree(5));
 	}
 	
 	@Test
 	public void testOutdegree()
 	{
-		DAG graph = new DAG(5);
+		DAG dag = new DAG(5);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(3, 3);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(3, 3);
 		
-		assertEquals(1, graph.outdegree(3));
-	
-		assertEquals(-1, graph.outdegree(5));
+		assertEquals(1, dag.outdegree(3));
+		assertEquals(-1, dag.outdegree(5));
 	}
 	
 	@Test 
 	public void testV()
 	{
-		DAG graph = new DAG(6);
-		assertEquals(6, graph.V());
+		DAG dag = new DAG(6);
+		assertEquals("checking creation of DAG", 6, dag.V());
 	}
 	
 	@Test
 	public void testE(){
 		
-		DAG graph = new DAG(5);
+		DAG dag = new DAG(5);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(3, 3);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 3);
+		dag.addEdge(3, 1);
 		
-		assertEquals(3, graph.E());
+		assertEquals("testing E()",3, dag.E());
 	}
 	
 	@Test
 	public void testAdj()
 	{
-		DAG graph = new DAG(5);
+		DAG dag = new DAG(5);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(3, 3);
-		graph.addEdge(4, 3);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(3, 3);
+		dag.addEdge(4, 3);
 		
 		String adj = "[4]";
-		assertEquals(adj, graph.adj(2).toString());
+		assertEquals(adj, dag.adj(2).toString());
 	}
 	
 	@Test
 	public void testforCycle()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
-		graph.addEdge(0, 1);
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 0);
-		graph.addEdge(2, 3);
-		graph.addEdge(3, 4);
+		dag.addEdge(0, 1);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 0);
+		dag.addEdge(2, 3);
+		dag.addEdge(3, 4);
 		
-		graph.findCycle(0);
+		dag.findCycle(0);
 		
-		assertTrue(graph.hasCycle());
+		assertTrue("checking for cycle in cyclic dag", dag.hasCycle());
 	}
 	
 	@Test
-	public void testAcyclicGraph()
+	public void testAcyclicdag()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
-		graph.addEdge(1, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(3, 3);
+		dag.addEdge(1, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(3, 3);
 		
-		graph.findCycle(1);
-		assertFalse(graph.hasCycle());
+		dag.findCycle(1);
+		assertFalse("Testing on an acyclic dag", dag.hasCycle());
 	}
 	
 	@Test
 	public void testLCA()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
 		
-		graph.addEdge(0, 1);
-		graph.addEdge(1, 3);
-		graph.addEdge(1, 2);
-		graph.addEdge(3, 4);
-		graph.addEdge(2, 5);
-		graph.addEdge(5, 6);
-		graph.addEdge(4, 6);
-		graph.addEdge(6, 7);
-		graph.addEdge(4, 8);
-		graph.addEdge(8, 7);
-		
-		assertEquals(1, graph.findLCA(4, 5));
-		assertEquals(8, graph.findLCA(7, 8));
-		assertEquals(6, graph.findLCA(6, 7));
+		dag.addEdge(1, 2);
+		dag.addEdge(1, 3);
+		dag.addEdge(2, 4);
+		dag.addEdge(2, 5);
+		dag.addEdge(5, 7);
+		dag.addEdge(3, 6);
+		assertEquals("Assert LCA(2,3) is 1", dag.findLCA(2, 3), 1);
+		assertEquals("Assert LCA(4,7) is 2", dag.findLCA(4, 7), 2);
+		assertEquals("Assert LCA(7,6) is 1", dag.findLCA(7, 6), 1);
 	}
 	
 	@Test
 	public void testLCAforNoCommonAncestors()
 	{
-		DAG graph = new DAG(10);
-		graph.addEdge(0, 1);
-		graph.addEdge(0, 3);
-		graph.addEdge(1, 3);
-		graph.addEdge(3, 2);
-		graph.addEdge(2, 4);
-		graph.addEdge(1, 5);
-		graph.addEdge(2, 5);
+		DAG dag = new DAG(10);
+		dag.addEdge(0, 1);
+		dag.addEdge(0, 3);
+		dag.addEdge(1, 3);
+		dag.addEdge(3, 2);
+		dag.addEdge(2, 4);
+		dag.addEdge(1, 5);
+		dag.addEdge(2, 5);
 		
-		//Check LCA function works
-		assertEquals(0, graph.findLCA(2, 1));
-		assertEquals(3, graph.findLCA(2, 3));
-		assertEquals(2, graph.findLCA(4, 5));
 		
-		//Check for non-present vertex
-		assertEquals(-1, graph.findLCA(8, 2));
-		
-		//Check for negative vertex
-		assertEquals(-1, graph.findLCA(-2, 3));
-		assertEquals(-1, graph.findLCA(3, -2));
-		assertEquals(-1, graph.findLCA(-2, -3));
+		assertEquals("Check LCA function works", 0, dag.findLCA(2, 1));
+		assertEquals("Check LCA function works",3, dag.findLCA(2, 3));
+		assertEquals("Check LCA function works",2, dag.findLCA(4, 5));		
+		assertEquals("Check LCA function works for non presnet node",-1, dag.findLCA(8, 2));
+		assertEquals("Check LCA function works for negatives",-1, dag.findLCA(-2, 3));
+		assertEquals("Check LCA function works for negatives",-1, dag.findLCA(3, -2));
+		assertEquals("Check LCA function works for negatives",-1, dag.findLCA(-2, -3));
 	}
 	
 	@Test
 	public void testLCAForNonDAG()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
-		graph.addEdge(0, 1);
-		graph.addEdge(0, 3);
-		graph.addEdge(3, 2);
-		graph.addEdge(2, 0);
-		graph.addEdge(2, 4);
+		dag.addEdge(0, 1);
+		dag.addEdge(0, 3);
+		dag.addEdge(3, 2);
+		dag.addEdge(2, 0);
+		dag.addEdge(2, 4);
 		
-		assertEquals(-1, graph.findLCA(3, 2));
-		assertEquals(-1, graph.findLCA(2, 4));
-		assertEquals(-1, graph.findLCA(1, 3));
-		assertEquals(-1, graph.findLCA(0, 3));
-		assertEquals(-1, graph.findLCA(1, 2));
+		//Testing for dag with cycle
+		assertEquals(-1, dag.findLCA(3, 2));
+		assertEquals(-1, dag.findLCA(2, 4));
+		assertEquals(-1, dag.findLCA(1, 3));
+		assertEquals(-1, dag.findLCA(0, 3));
+		assertEquals(-1, dag.findLCA(1, 2));
 		
 	}
 	
 	@Test
 	public void testLCAForSameVertex()
 	{
-		DAG graph = new DAG(10);
+		DAG dag = new DAG(10);
 		
-		graph.addEdge(0, 1);
-		graph.addEdge(0, 3);
-		graph.addEdge(1, 3);
+		dag.addEdge(0, 1);
+		dag.addEdge(0, 3);
+		dag.addEdge(1, 3);
 		
-		assertEquals(3, graph.findLCA(3, 3));
+		assertEquals("checking for lca with ancestor on same vertex", 3, dag.findLCA(3, 3));
 		
 	}
 	
 	@Test
 	public void testLCAForEmptyDAG()
 	{
-		DAG graph = new DAG(5);
-		assertEquals(-1, graph.findLCA(0, 2));
-		assertEquals(-1, graph.findLCA(0, 4));
-		assertEquals(-1, graph.findLCA(0, 0));
+		DAG dag = new DAG(5);
+		assertEquals("Empty DAG test", -1, dag.findLCA(0, 2));
+		assertEquals("Empty DAG test",-1, dag.findLCA(0, 4));
+		assertEquals("Empty DAG test",-1, dag.findLCA(0, 0));
 	}
 	
 	
